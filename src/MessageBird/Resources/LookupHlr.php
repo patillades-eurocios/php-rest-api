@@ -26,7 +26,9 @@ class LookupHlr extends Base
     }
 
     /**
-     * @param $phoneNumber
+     * @param $hlr
+     * @param $countryCode
+     * @param $curloptConnectTimeout
      *
      * @return $this->Object
      *
@@ -34,7 +36,7 @@ class LookupHlr extends Base
      * @throws \MessageBird\Exceptions\RequestException
      * @throws \MessageBird\Exceptions\ServerException
      */
-    public function create($hlr, $countryCode = null)
+    public function create($hlr, $countryCode = null, $curloptConnectTimeout = Common\HttpClient::DEFAULT_CURLOPT_CONNECTTIMEOUT)
     {
         if(empty($hlr->msisdn)) {
             throw new InvalidArgumentException('The phone number ($hlr->msisdn) cannot be empty.');
@@ -45,7 +47,7 @@ class LookupHlr extends Base
             $query = array("countryCode" => $countryCode);
         }
         $ResourceName = $this->resourceName . '/' . ($hlr->msisdn) . '/hlr' ;
-        list(, , $body) = $this->HttpClient->performHttpRequest(Common\HttpClient::REQUEST_POST, $ResourceName, $query, json_encode($hlr));
+        list(, , $body) = $this->HttpClient->performHttpRequest(Common\HttpClient::REQUEST_POST, $ResourceName, $query, json_encode($hlr), $curloptConnectTimeout);
         return $this->processRequest($body);
     }
 
