@@ -18,6 +18,8 @@ class HttpClient
 
     const HTTP_NO_CONTENT = 204;
 
+    const DEFAULT_CURLOPT_CONNECTTIMEOUT = 2;
+
     /**
      * @var string
      */
@@ -80,11 +82,12 @@ class HttpClient
      * @param      $resourceName
      * @param null $query
      * @param null $body
+     * @param int  $curloptConnectTimeout
      *
      * @return array
      * @throws Exceptions\HttpException
      */
-    public function performHttpRequest($method, $resourceName, $query = null, $body = null)
+    public function performHttpRequest($method, $resourceName, $query = null, $body = null, $curloptConnectTimeout = self::DEFAULT_CURLOPT_CONNECTTIMEOUT)
     {
         $curl = curl_init();
 
@@ -101,7 +104,7 @@ class HttpClient
         curl_setopt($curl, CURLOPT_URL, $this->getRequestUrl($resourceName, $query));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $curloptConnectTimeout);
 
         if ($method === self::REQUEST_GET) {
             curl_setopt($curl, CURLOPT_HTTPGET, true);

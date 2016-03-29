@@ -72,16 +72,17 @@ class Base
     /**
      * @param       $object
      * @param array|null $query
+     * @param int $curloptConnectTimeout
      *
      * @return $this->Object
      * @throws Exceptions\HttpException
      * @throws Exceptions\RequestException
      * @throws Exceptions\ServerException
      */
-    public function create($object, $query = null)
+    public function create($object, $query = null, $curloptConnectTimeout = Common\HttpClient::DEFAULT_CURLOPT_CONNECTTIMEOUT)
     {
         $body = json_encode($object);
-        list(, , $body) = $this->HttpClient->performHttpRequest(Common\HttpClient::REQUEST_POST, $this->resourceName, $query, $body);
+        list(, , $body) = $this->HttpClient->performHttpRequest(Common\HttpClient::REQUEST_POST, $this->resourceName, $query, $body, $curloptConnectTimeout);
         return $this->processRequest($body);
     }
 
